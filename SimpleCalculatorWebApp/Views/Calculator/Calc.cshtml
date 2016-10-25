@@ -1,0 +1,79 @@
+﻿@model SimpleCalculatorWebApplication.Models.FormulaModel
+
+@{
+    ViewBag.Title = "Calc";
+    Layout = "~/Views/Shared/_CalcLayout.cshtml";
+}
+
+<h3>Simple Calculator</h3>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Operand1, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Operand1, new { htmlAttributes = new { @class = "form-control", @id = "Text1", @autofocus = "autofocus", @tabindex = "1", @onclick = "setActiveTextBox(\"Op1\")" } })
+                @Html.ValidationMessageFor(model => model.Operand1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Operand2, htmlAttributes: new { @class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Operand2, new { htmlAttributes = new { @class = "form-control", @id = "Text2", @tabindex = "2", @onclick = "setActiveTextBox(\"Op2\")" } })
+                @Html.ValidationMessageFor(model => model.Operand2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div>
+            <label class="radio-inline col-md-offset-1">@Html.RadioButtonFor(model => model.Operator, true, htmlAttributes: new { @name = "Radio", @id = "Add", @Value = "+" }) Add</label>
+            <label class="radio-inline col-md-offset-1">@Html.RadioButtonFor(model => model.Operator, true, htmlAttributes: new { @name = "Radio", @id = "Sub", @Value = "-" }) Subtract</label>
+            <label class="radio-inline col-md-offset-1">@Html.RadioButtonFor(model => model.Operator, true, htmlAttributes: new { @name = "Radio", @id = "Mlt", @Value = "*" }) Multiply</label>
+            <label class="radio-inline col-md-offset-1">@Html.RadioButtonFor(model => model.Operator, true, htmlAttributes: new { @name = "Radio", @id = "Div", @Value = "/" }) Divide</label>
+            <div class="col-md-offset-1">@Html.ValidationMessageFor(model => model.Operator, "", new { @class = "text-danger" })</div>
+        </div>
+        <br/>
+        <div class="col-md-offset-1">
+            <input id="Button7" type="button" value="7" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('7')" />
+            <input id="Button8" type="button" value="8" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('8')" />
+            <input id="Button9" type="button" value="9" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('9')" />
+        </div>
+        <div class="col-md-offset-1">
+            <input id="Button4" type="button" value="4" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('4')" />
+            <input id="Button5" type="button" value="5" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('5')" />
+            <input id="Button6" type="button" value="6" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('6')" />
+        </div>
+        <div class="col-md-offset-1">
+            <input id="Button1" type="button" value="1" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('1')" />
+            <input id="Button2" type="button" value="2" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('2')" />
+            <input id="Button3" type="button" value="3" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('3')" />
+        </div>
+        <div class="col-md-offset-1">
+            <input id="Buttondot" type="button" value="." class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('.')" />
+            <input id="Button0" type="button" value="0" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="loadClickedNumber('0')" />
+            <input id="ButtonCe" type="button" value="ce" class="btn btn-lg btn-default btn-key-spacer-bottom" onclick="clearAllFields()" />
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-10">
+                <input type="submit" value="Calculate" class="btn btn-default" />
+                @if (ViewBag.Result != null)
+                {
+                    <label class="col-md-offset-0">Result: </label>   @ViewBag.Result
+                }
+            </div>
+
+        </div>
+    </div>
+}
+
+@Html.Hidden("textBoxActive", "TB1")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
